@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Ismata</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4a373;
+            --accent: #faedcd;
+            --text: #432818;
+        }
+
+        body {
+            background-color: #fefae0;
+            color: var(--text);
+            font-family: 'Lora', serif;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .cursive {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Flower falling animation */
+        .petal {
+            position: fixed;
+            top: -10%;
+            z-index: 9999;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .typewriter {
+            display: inline-block;
+            border-right: 2px solid var(--primary);
+            animation: blink 0.75s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(188, 108, 37, 0.1);
+        }
+
+        .scroll-container {
+            max-height: 70vh;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        #intro-screen {
+            transition: opacity 1s ease-out;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Screen 1: The Trigger -->
+    <div id="intro-screen" class="text-center z-10">
+        <div class="mb-6 animate-bounce">
+            <svg class="w-20 h-20 mx-auto text-orange-300" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 18l-1.45-1.32C3.4 11.99 1 9.5 1 6.5 1 4.01 3.01 2 5.5 2c1.54 0 3.04.99 3.57 2.36h1.87C11.46 2.99 12.96 2 14.5 2 16.99 2 19 4.01 19 6.5c0 3-2.4 5.49-7.55 10.18L10 18z"/>
+            </svg>
+        </div>
+        <h1 class="cursive text-4xl mb-8 text-orange-900">Iniloh ngetik tuh tadi bikin ini ismata syafiraaaaaaaaaaa</h1>
+        <button onclick="startExperience()" class="bg-orange-200 hover:bg-orange-300 text-orange-900 font-semibold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105">
+            Baca Pesan Ini
+        </button>
+    </div>
+
+    <!-- Screen 2: The Poetry -->
+    <div id="poetry-screen" class="hidden fixed inset-0 flex items-center justify-center p-6 z-10">
+        <div class="glass-card w-full max-w-lg p-8 rounded-3xl relative overflow-hidden">
+            <div class="cursive text-3xl mb-4 text-orange-800 border-b border-orange-200 pb-2">Ismata</div>
+            
+            <div id="poetry-content" class="scroll-container italic text-lg leading-relaxed text-stone-700 whitespace-pre-line">
+                <!-- Text will be typed here -->
+                <span id="text-target"></span><span id="cursor" class="typewriter"></span>
+            </div>
+
+            <div id="footer-note" class="mt-6 pt-4 border-t border-orange-100 text-center opacity-0 transition-opacity duration-1000">
+                <p class="cursive text-xl text-orange-900">Kamu luar biasa apa adanya.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio for Background (Optional - Add your URL) -->
+    <!-- <audio id="bg-music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-tenderness.mp3" type="audio/mpeg">
+    </audio> -->
+
+    <script>
+        const fullPoetry = `Ia perempuan
+yang belajar kuat tanpa mengeraskan hati,
+mandiri tanpa kehilangan tawa.
+
+Dulu ada gingsul kecil
+yang sering membuat senyumnya nakal,
+kini berganti behel—
+bukan untuk mengubah parasnya,
+karena cantiknya tak pernah pergi,
+hanya tumbuh dewasa.
+
+Ia lucu tanpa berusaha,
+tertawa seperti jeda
+di hari yang terlalu bising.
+
+Tangannya tak menunggu nasib,
+ia pandai menjemput rezeki,
+mengikat mimpi
+dengan kerja dan doa yang sunyi.
+
+Ismata,
+perempuan yang tahu caranya berdiri sendiri,
+namun tetap hangat
+bila dunia ingin bersandar.
+
+Cantiknya bukan soal wajah,
+melainkan tentang keberanian
+untuk tetap menjadi dirinya
+di tengah dunia yang gemar menuntut.`;
+
+        let index = 0;
+        const target = document.getElementById('text-target');
+        const poetryScreen = document.getElementById('poetry-screen');
+        const introScreen = document.getElementById('intro-screen');
+        const container = document.querySelector('.scroll-container');
+
+        function startExperience() {
+            introScreen.style.opacity = '0';
+            setTimeout(() => {
+                introScreen.classList.add('hidden');
+                poetryScreen.classList.remove('hidden');
+                poetryScreen.style.opacity = '0';
+                setTimeout(() => {
+                    poetryScreen.style.opacity = '1';
+                    typeWriter();
+                    createPetals();
+                }, 100);
+            }, 1000);
+            
+            // Try to play music if user provided URL
+            const music = document.getElementById('bg-music');
+            if(music) music.play();
+        }
+
+        function typeWriter() {
+            if (index < fullPoetry.length) {
+                target.textContent += fullPoetry.charAt(index);
+                index++;
+                
+                // Auto scroll to bottom as text grows
+                container.scrollTop = container.scrollHeight;
+                
+                let speed = 45; // Default typing speed
+                if (fullPoetry.charAt(index-1) === '\n') speed = 400; // Pause on new lines
+                if (fullPoetry.charAt(index-1) === ',') speed = 200; // Pause on commas
+
+                setTimeout(typeWriter, speed);
+            } else {
+                document.getElementById('cursor').style.display = 'none';
+                document.getElementById('footer-note').classList.remove('opacity-0');
+            }
+        }
+
+        // Falling petals effect
+        function createPetals() {
+            const petalCount = 20;
+            const colors = ['#ffccd5', '#fff0f3', '#ffb3c1', '#faedcd'];
+            
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.innerHTML = '🌸'; // Using cherry blossom emoji as petals
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                petal.style.color = colors[Math.floor(Math.random() * colors.length)];
+                petal.style.opacity = Math.random();
+                
+                const duration = Math.random() * 5 + 5;
+                const delay = Math.random() * 5;
+                
+                petal.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                document.body.appendChild(petal);
+            }
+        }
+    </script>
+</body>
+</html>
